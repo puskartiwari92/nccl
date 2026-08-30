@@ -2,13 +2,27 @@ services:
   yetiapp:
     image: node:20-alpine
     container_name: yetiapp
+
     working_dir: /app
+
     ports:
       - "3000:3000"
+
     volumes:
       - .:/app
-      - /app/node_modules
-      - /app/.next
-    command: sh -c "npm install && npm run dev"
+      - yetiapp_node_modules:/app/node_modules
+      - yetiapp_next:/app/.next
+
     environment:
       NODE_ENV: development
+
+    env_file:
+      - .env
+
+    command: sh -c "npm install && npm run dev -- -H 0.0.0.0"
+
+    restart: unless-stopped
+
+volumes:
+  yetiapp_node_modules:
+  yetiapp_next:
